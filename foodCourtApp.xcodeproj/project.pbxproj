@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		9A6979632CBA6A5900E28F3E /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 9A6979622CBA6A5900E28F3E /* Alamofire */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		9A6979242CB9061D00E28F3E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A6979632CBA6A5900E28F3E /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +117,7 @@
 			);
 			name = foodCourtApp;
 			packageProductDependencies = (
+				9A6979622CBA6A5900E28F3E /* Alamofire */,
 			);
 			productName = foodCourtApp;
 			productReference = 9A6979122CB9061D00E28F3E /* foodCourtApp.app */;
@@ -195,6 +201,9 @@
 			);
 			mainGroup = 9A6979092CB9061D00E28F3E;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				9A6979402CB9125200E28F3E /* XCRemoteSwiftPackageReference "Alamofire" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 9A6979132CB9061D00E28F3E /* Products */;
 			projectDirPath = "";
@@ -591,6 +600,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		9A6979402CB9125200E28F3E /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.9.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		9A6979622CBA6A5900E28F3E /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9A6979402CB9125200E28F3E /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 9A69790A2CB9061D00E28F3E /* Project object */;
 }
