@@ -18,8 +18,11 @@ class MemberViewModel {
         ]
         let params = common.toDictionary(loginDto)
         
-        alamofireViewModel.apiRequest(url: "/api-1/member/login", method: .post, parameters: params, headers: headers) { (res: ApiResponseViewModel<LoginDto>?, err) in
-            
+        alamofireViewModel.apiRequest(url: "/api-1/member/login", method: .post, parameters: params, headers: headers) { (res: ApiResponseViewModel<Bool>?, err) in
+            if let res = res {
+                self.common.alert(message: res.message)
+            }
+
         }
         
     }

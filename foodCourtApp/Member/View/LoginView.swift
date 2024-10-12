@@ -58,7 +58,7 @@ struct LoginView: View {
                     boundIntVal: .constant(nil),
                     onButtonClick: {
                         memberViewModel.Login(loginDto: LoginDto(userId: userId, passcode: passcode)) { res, error in
-                                
+                            
                         }
                     }
                 )
@@ -71,9 +71,6 @@ struct LoginView: View {
             
         } // VStack
     } // View
-    private func handleLogin() {
-        print("로그인 버튼 클릭")
-    }
 } // Main view
 
 #Preview {
