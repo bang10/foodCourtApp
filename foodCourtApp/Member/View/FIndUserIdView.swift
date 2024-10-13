@@ -124,16 +124,17 @@ struct FIndUserIdView: View {
                     , onButtonClick: {
                         self.isClose = true
                     }
-                )
-                .alert(isPresented: $isClose) {
-                    self.common.alertDialog(
-                        title: "닫기"
-                        , message: "창을 닫으면 입력된 모든 데이터가 사라집니다. 창을 닫으시겠습니까?"
-                        , confirmAction: {
-                            self.presentationMode.wrappedValue.dismiss()
-                        }
+                    , isAlertDialog: isClose
+                    , alertEvent: (
+                        self.common.alertDialog(
+                            title: "닫기"
+                            , message: "창을 닫으면 입력된 모든 데이터가 사라집니다. 창을 닫으시겠습니까?"
+                            , confirmAction: {
+                                presentationMode.wrappedValue.dismiss()
+                            }
+                        )
                     )
-                }
+                )
                 
             } // VStack
         } // navigationView
