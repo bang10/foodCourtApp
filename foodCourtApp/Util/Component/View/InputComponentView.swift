@@ -14,13 +14,15 @@ struct InputComponentView: View {
     @Binding var heightValue: CGFloat
     
     @Binding var inputValue: String
+    @Binding var isLock: Bool
     
-    init(text: Binding<String> = .constant(" "), type: Binding<String> = .constant("normal"), widthValue: Binding<CGFloat> = .constant(100), heightValue: Binding<CGFloat> = .constant(30), inputValue: Binding<String> = .constant("")) {
+    init(text: Binding<String> = .constant(" "), type: Binding<String> = .constant("normal"), widthValue: Binding<CGFloat> = .constant(100), heightValue: Binding<CGFloat> = .constant(30), inputValue: Binding<String> = .constant(""), isLock: Binding<Bool> = .constant(false)) {
         _type = type
         _text = text
         _widthValue = widthValue
         _heightValue = heightValue
         _inputValue = inputValue
+        _isLock = isLock
     }
     
     var body: some View {
@@ -35,6 +37,7 @@ struct InputComponentView: View {
                     .textCase(.lowercase)
                     .autocapitalization(.none)
                     .disableAutocorrection(false)
+                    .disabled(isLock)
             } else {
                 SecureField($text.wrappedValue, text: $inputValue)
                     .frame(width: $widthValue.wrappedValue, height: $heightValue.wrappedValue)
@@ -45,12 +48,13 @@ struct InputComponentView: View {
                     .textCase(.lowercase)
                     .autocapitalization(.none)
                     .disableAutocorrection(false)
+                    .disabled(isLock)
             }
             
         } // VStack
     } // View
 }
 
-#Preview {
-    InputComponentView()
-}
+//#Preview {
+//    InputComponentView()
+//}

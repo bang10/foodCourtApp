@@ -7,7 +7,13 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct IndexView: View {
+    @Binding var userId: String
+    
+    init(userId: Binding<String> = .constant("")) {
+        _userId = userId
+    }
+    
     var body: some View {
         VStack {
             Image(systemName: "globe")
@@ -20,5 +26,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    IndexView()
 }

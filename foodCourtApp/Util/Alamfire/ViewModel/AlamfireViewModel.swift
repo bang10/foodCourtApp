@@ -56,6 +56,7 @@ class AlamfireViewModel {
                                 completion(nil, error)
                             }
                         case .failure(let error):
+                            print(error)
                             completion(nil, error)
                         }
             }

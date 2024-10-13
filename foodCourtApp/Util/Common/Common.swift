@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import SwiftUI
 
 class Common {
     init() {}
@@ -19,6 +20,18 @@ class Common {
         alertController.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
         
         UIApplication.shared.keyWindow?.rootViewController?.present(alertController, animated: true, completion: nil)
+    }
+    
+    /**
+     확인, 취소 알럿
+     */
+    func alertDialog(title: String, message: String, confirmAction: @escaping () -> Void) -> Alert {
+        return Alert (
+            title: Text(title),
+            message: Text(message),
+            primaryButton: .default(Text("확인"), action: confirmAction),
+            secondaryButton: .cancel(Text("취소"))
+        )
     }
     
     /**

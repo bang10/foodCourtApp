@@ -9,9 +9,10 @@ import SwiftUI
 
 struct ButtonComponentView: View {
     @Binding var buttonTittle: String
-    @Binding var toggleVal: Bool?
+    @Binding var toggleVal: Bool
     @Binding var boundStringVal: String?
     @Binding var boundIntVal: Int?
+    @Binding var isLock: Bool?
     var onButtonClick: (() -> Void)?
     
     var body: some View {
@@ -21,8 +22,8 @@ struct ButtonComponentView: View {
             Text(buttonTittle)
                 .background(Color.white.opacity(0.1))
                 .foregroundStyle(.black)
-                .padding()
         }
+        .disabled(isLock ?? false)
 
     } // View
 }
