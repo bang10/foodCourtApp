@@ -107,9 +107,13 @@ struct LoginView: View {
                             boundIntVal: .constant(nil),
                             isLock: .constant(nil),
                             onButtonClick: {
-                                
+                                self.isFindPw = true
                             }
                         ) // ButtonComponentView
+                    }
+                    
+                    NavigationLink(destination: ResetPasscodeAuthCheckView(), isActive: $isFindPw) {
+                        EmptyView()
                     }
                     
                     // 회원 가입

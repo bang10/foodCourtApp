@@ -1,37 +1,33 @@
 //
-//  FIndUserIdView.swift
+//  ResetPasscodeAuthCheckView.swift
 //  foodCourtApp
 //
-//  Created by bangseonghwan on 10/13/24.
+//  Created by bangseonghwan on 10/14/24.
 //
 
 import SwiftUI
 
-struct FIndUserIdView: View {
-    @State var userName: String = ""
-    @State var tellNumber: String = ""
-    @State var authCode: String = ""
+struct ResetPasscodeAuthCheckView: View {
+    @State private var userName: String = ""
+    @State private var userId: String = ""
+    @State private var tellNumber: String = ""
+    @State private var code: String = ""
     @State var authSendMessage: String = "인증번호 발송"
     @State var isSendAuth: Bool = false
     @State var isCheckAuth: Bool = false
     @State var isSuccessCheck: Bool = false
     @State var isClose: Bool = false
+    @State var isClickReset: Bool = false
     
-    @Environment(\.presentationMode) var presentationMode
-    
+    var common: Common = Common()
     var authViewModel: AuthViewModel = AuthViewModel()
     var memberViewModel: MemberViewModel = MemberViewModel()
-    var common: Common = Common()
-    var findMemberDto: FindMemberInfoDto
     
-    init() {
-        findMemberDto = FindMemberInfoDto(userId: "", userName: "", tellNumber: "")
-    }
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         NavigationView {
             VStack {
-                // 이름 입력 칸
                 Text("이름")
                     .padding(.trailing, 220)
                 InputComponentView(
@@ -40,6 +36,17 @@ struct FIndUserIdView: View {
                     , widthValue: .constant(250)
                     , heightValue: .constant(36)
                     , inputValue: $userName
+                )
+                .padding(.bottom, 10)
+                
+                Text("ID")
+                    .padding(.trailing, 220)
+                InputComponentView(
+                    text: .constant("ID")
+                    , type: .constant("normal")
+                    , widthValue: .constant(250)
+                    , heightValue: .constant(36)
+                    , inputValue: $userId
                 )
                 .padding(.bottom, 10)
                 
@@ -55,18 +62,16 @@ struct FIndUserIdView: View {
                 )
                 .padding(.bottom, 10)
                 
-                // 인증번호 입력 칸, 버튼
                 HStack {
                     InputComponentView(
                         text: .constant("인증번호")
                         , type: .constant("normal")
                         , widthValue: .constant(150)
                         , heightValue: .constant(36)
-                        , inputValue: $authCode
-                        , isLock: .constant(isSuccessCheck)
+                        , inputValue: $code
+                        , isLock: $isSuccessCheck
                     )
                     .padding(.bottom, 10)
-                    
                     
                     if !self.isSendAuth {
                         // 인증번호 전송
@@ -90,9 +95,9 @@ struct FIndUserIdView: View {
                             , toggleVal: .constant(false)
                             , boundStringVal: .constant(nil)
                             , boundIntVal: .constant(nil)
-                            , isLock: .constant(isCheckAuth)
+                            , isLock: .constant(isSuccessCheck)
                             , onButtonClick: {
-                                authViewModel.requestAuthCheck(authModel: AuthModel(sendTo: tellNumber, code: authCode, requestRedisType: "id")) { res in
+                                authViewModel.requestAuthCheck(authModel: AuthModel(sendTo: tellNumber, code: code, requestRedisType: "pass")) { res in
                                     self.isCheckAuth = res
                                     self.isSuccessCheck = res
                                 }
@@ -100,20 +105,32 @@ struct FIndUserIdView: View {
                         )
                         .padding(.bottom, 10)
                     }
-                    
                 } // HStack
                 
                 ButtonComponentView(
-                    buttonTittle: .constant("아이디 찾기")
+                    buttonTittle: .constant("비밀번호 재설정")
                     , toggleVal: .constant(false)
                     , boundStringVal: .constant(nil)
                     , boundIntVal: .constant(nil)
                     , isLock: .constant(nil)
                     , onButtonClick: {
-                        memberViewModel.findUserId(isCheck: isCheckAuth, findMemberInfoDto: FindMemberInfoDto(userId: nil, userName: userName, tellNumber: tellNumber))
+                        if isSuccessCheck {
+                            // TODO 사용자 확인 절차 필요
+                            memberViewModel.checkUserInfo(baseUserDto: BaseUserDto(userId: $userId.wrappedValue, userName: $userName.wrappedValue, tellNumber: $tellNumber.wrappedValue)) { res in
+                                
+                                self.isClickReset = res
+                            }
+                            
+                        } else {
+                            self.common.alert(message: "인증을 먼저 진행해 주세요.")
+                        }
                     }
                 )
                 .padding(.bottom, 10)
+                
+                NavigationLink(destination: ResetPasscodeView(userId: $userId), isActive: $isClickReset) {
+                    EmptyView()
+                }
                 
                 ButtonComponentView(
                     buttonTittle: .constant("페이지 닫기")
@@ -122,7 +139,7 @@ struct FIndUserIdView: View {
                     , boundIntVal: .constant(nil)
                     , isLock: .constant(nil)
                     , onButtonClick: {
-                        self.isClose = true
+                        self.isClose.toggle()
                     }
                     , isAlertDialog: isClose
                     , alertEvent: (
@@ -137,13 +154,12 @@ struct FIndUserIdView: View {
                 )
                 
             } // VStack
-        } // navigationView
-        .navigationTitle("아이디 찾기")
+        } // NavigationView
+        .navigationTitle("비밀번호 초기화")
         .navigationBarTitleDisplayMode(.automatic)
-        
-    } // View
-} // Main View
+    } // view
+}// View
 
 #Preview {
-    FIndUserIdView()
+    ResetPasscodeAuthCheckView()
 }

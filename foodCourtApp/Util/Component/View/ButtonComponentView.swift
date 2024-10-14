@@ -15,15 +15,31 @@ struct ButtonComponentView: View {
     @Binding var isLock: Bool?
     var onButtonClick: (() -> Void)?
     
+    var isAlertDialog: Bool?
+    var alertEvent: Alert?
+    
     var body: some View {
-        Button {
-            onButtonClick?()
-        } label: {
-            Text(buttonTittle)
-                .background(Color.white.opacity(0.1))
-                .foregroundStyle(.black)
+        if let isAlertDialog = isAlertDialog{
+            Button {
+                onButtonClick?()
+            } label: {
+                Text(buttonTittle)
+                    .background(Color.white.opacity(0.1))
+                    .foregroundStyle(.black)
+            }
+            .disabled(isLock ?? false)
+            .alert(isPresented: .constant(isAlertDialog)) { alertEvent! }
+        } else {
+            Button {
+                onButtonClick?()
+            } label: {
+                Text(buttonTittle)
+                    .background(Color.white.opacity(0.1))
+                    .foregroundStyle(.black)
+            }
+            .disabled(isLock ?? false)
         }
-        .disabled(isLock ?? false)
+        
 
     } // View
 }

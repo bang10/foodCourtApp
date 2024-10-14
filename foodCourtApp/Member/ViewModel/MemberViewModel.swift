@@ -62,4 +62,26 @@ class MemberViewModel {
         }
     }
     
+    /**
+     사용자 여부 확인
+     */
+    func checkUserInfo(baseUserDto: BaseUserDto, result: @escaping (Bool) -> Void) {
+        let headers: HTTPHeaders = [
+            "Content-Type": "application/json"
+        ]
+        let params = common.toDictionary(baseUserDto)
+        
+        alamofireViewModel.apiRequest(url: "/api-1/member/check/user/info", method: .post, parameters: params, headers: headers) { (res: ApiResponseViewModel<Bool>?, err) in
+            if let res = res {
+                if res.code != "0" {
+                    self.common.alert(message: res.message)
+                } else if !res.result {
+                    self.common.alert(message: "회원 정보가 존재하지 않습니다.")
+                }
+                result(res.result)
+            }
+        }
+        
+    }
+    
 }
