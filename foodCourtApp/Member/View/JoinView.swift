@@ -54,11 +54,27 @@ struct JoinView: View {
                         , boundIntVal: .constant(nil)
                         , isLock: .constant(nil)
                         , onButtonClick: {
-                            // TODO 중복 여부 확인
+                            if !validation.validationId(value: userId, target: "id") {
+                                self.common.alert(message: "ID 형식에 맞춰 작성해 주세요.")
+                                self.isDuplicationId = false
+                                return
+                            }
+                            memberViewModel.checkUserInfo(baseUserDto: .init(userId: userId)) { res in
+                                if !res {
+                                    self.common.alert(message: "사용 가능한 ID입니다.")
+                                } else {
+                                    self.common.alert(message: "이미 사용중인 ID입니다.")
+                                }
+                                self.isDuplicationId = !res
+                            }
                         }
                     )
                     .padding(.bottom, 10)
                 } // HStack
+                
+                Text("영어 숫자를 조합하여 8자~12자로 입력해주세요.")
+                    .font(.footnote)
+                    .padding(.bottom, 10)
                 
                 Text("비밀번호")
                     .padding(.trailing, 199)
@@ -164,7 +180,7 @@ struct JoinView: View {
                             , boundIntVal: .constant(nil)
                             , isLock: .constant(isCheckAuth)
                             , onButtonClick: {
-                                authViewModel.requestAuthCheck(authModel: AuthModel(sendTo: tellNumber, code: authCode, requestRedisType: "id")) { res in
+                                authViewModel.requestAuthCheck(authModel: AuthModel(sendTo: tellNumber, code: authCode, requestRedisType: "join")) { res in
                                     self.isCheckAuth = res
                                     self.isSuccessCheck = res
                                 }
@@ -175,7 +191,7 @@ struct JoinView: View {
                 } // HStack
                 
                 ButtonComponentView(
-                    buttonTittle: .constant("가입")
+                    buttonTittle: .constant("회원 가입")
                     , toggleVal: .constant(false)
                     , boundStringVal: .constant(nil)
                     , boundIntVal: .constant(nil)
@@ -190,17 +206,29 @@ struct JoinView: View {
                             , message: "입력하신 정보로 가입을 완료하시겠습니까?"
                             , confirmAction: {
                                 // TODO 가입
-                                if self.isDuplicationId {
+                                if !self.isDuplicationId {
                                     self.common.alert(message: "ID 중복여부를 확인해 주세요.")
-                                } else if !self.isSuccessCheck || !self.isCheckAuth {
+                                    return
+                                }
+                                if !self.isSuccessCheck || !self.isCheckAuth {
                                     self.common.alert(message: "번호 인증을 진행해 주세요.")
-                                } // TODO 비밀번호 중복 여부
+                                    return
+                                }
+                                memberViewModel.join(baseUserDto: .init(userId: userId, passcode: passcode, passcodeCheck: passcodeCheck, userName: userName, tellNumber: tellNumber)) {res in
+                                    if res {
+                                        common.alert(message: "가입이 완료되었습니다.")
+                                        self.isSuccessJoin = res
+                                    }
+                                }
                             }
                         )
                     )
                 )
                 .padding(.bottom, 10)
                 
+                NavigationLink(destination: LoginView(), isActive: $isSuccessJoin) {
+                    EmptyView()
+                }
                 
                 ButtonComponentView(
                     buttonTittle: .constant("페이지 닫기")

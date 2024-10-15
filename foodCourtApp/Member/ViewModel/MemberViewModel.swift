@@ -11,6 +11,7 @@ import Alamofire
 class MemberViewModel {
     private var common = Common()
     private var alamofireViewModel = AlamfireViewModel()
+    private var validation = ValidationService()
     
     /**
      로그인
@@ -75,8 +76,6 @@ class MemberViewModel {
             if let res = res {
                 if res.code != "0" {
                     self.common.alert(message: res.message)
-                } else if !res.result {
-                    self.common.alert(message: "회원 정보가 존재하지 않습니다.")
                 }
                 result(res.result)
             }
@@ -98,6 +97,38 @@ class MemberViewModel {
                 result(res.result)
             }
         }
+    }
+    
+    /**
+     회원가입
+     */
+    func join(baseUserDto: BaseUserDto, result: @escaping (Bool) -> Void) {
+        if !validation.validationId(value: baseUserDto.userId!, target: "id") {
+            common.alert(message: "아이디 형식이 올바르지 않습니다.")
+            return
+        }
+        if baseUserDto.passcode != baseUserDto.passcodeCheck {
+            common.alert(message: "비밀번호가 일치하지 않습니다.")
+            return
+        }
+        if !validation.validationId(value: baseUserDto.tellNumber!, target: "tellNumber") {
+            common.alert(message: "전화번호 형식이 올바르지 않습니다. \n숫자만 입력해 주세요.")
+            return
+        }
+        let headers: HTTPHeaders = [
+            "Content-Type": "application/json"
+        ]
+        let params = common.toDictionary(baseUserDto)
+        
+        alamofireViewModel.apiRequest(url: "/api-1/member/join", method: .post, parameters: params, headers: headers) { (res: ApiResponseViewModel<Bool>?, err) in
+            if let res = res {
+                if !res.result {
+                    self.common.alert(message: res.message)
+                }
+                result(res.result)
+            }
+        }
+        
     }
     
 }
