@@ -84,4 +84,20 @@ class MemberViewModel {
         
     }
     
+    /**
+        비밀번호 변경
+     */
+    func updatePasscode(baseUserDto: BaseUserDto, result: @escaping (Bool) -> Void) {
+        let headers: HTTPHeaders = [
+            "Content-Type": "application/json"
+        ]
+        let params = common.toDictionary(baseUserDto)
+        alamofireViewModel.apiRequest(url: "/api-1/member/update/passcode", method: .post, parameters: params, headers: headers) { (res: ApiResponseViewModel<Bool>?, err) in
+            if let res = res {
+                self.common.alert(message: res.message)
+                result(res.result)
+            }
+        }
+    }
+    
 }

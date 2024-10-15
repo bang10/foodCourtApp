@@ -91,7 +91,7 @@ struct LoginView: View {
                             boundIntVal: .constant(nil),
                             isLock: .constant(nil),
                             onButtonClick: {
-                                self.isFindId = true
+                                self.isFindId.toggle()
                             }
                         ) // ButtonComponentView
                         
@@ -107,7 +107,7 @@ struct LoginView: View {
                             boundIntVal: .constant(nil),
                             isLock: .constant(nil),
                             onButtonClick: {
-                                self.isFindPw = true
+                                self.isFindPw.toggle()
                             }
                         ) // ButtonComponentView
                     }
@@ -124,15 +124,18 @@ struct LoginView: View {
                         boundIntVal: .constant(nil),
                         isLock: .constant(nil),
                         onButtonClick: {
-                            
+                            self.isSignUp.toggle()
                         }
                     ) // ButtonComponentView
+                    
+                    NavigationLink(destination: JoinView(), isActive: $isSignUp) {
+                        EmptyView()
+                    }
                     
                 }// VStack
             } // VStack
         } // navigationView
-        .navigationTitle("로그인")
-        .navigationBarTitleDisplayMode(.automatic)
+        .navigationBarBackButtonHidden(true)
     } // View
 } // Main view
 

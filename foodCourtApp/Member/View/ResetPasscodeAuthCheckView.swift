@@ -127,9 +127,8 @@ struct ResetPasscodeAuthCheckView: View {
                     }
                 )
                 .padding(.bottom, 10)
-                
-                NavigationLink(destination: ResetPasscodeView(userId: $userId), isActive: $isClickReset) {
-                    EmptyView()
+                .sheet(isPresented: $isClickReset) {
+                    ResetPasscodeView(userId: $userId, userName: $userName, tellNumber: $tellNumber)
                 }
                 
                 ButtonComponentView(
