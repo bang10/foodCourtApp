@@ -25,6 +25,7 @@ class AlamfireViewModel {
         headers: HTTPHeaders,
         completion: @escaping (ApiResponseViewModel<T>?, Error?) -> Void
     ) {
+        var common: Common = Common()
         let requestMehtod: HTTPMethod = (method == .get) ? .get : .post
         
         // GET인 경우
@@ -59,6 +60,14 @@ class AlamfireViewModel {
                             print(error)
                             completion(nil, error)
                         }
+                
+                if response.response?.statusCode == 400 {
+                    common.alert(message: "입력 값이 잘못되었습니다.")
+                }
+                
+                if response.response?.statusCode == 500 {
+                    common.alert(message: "서버에 오류가 발생했습니다.")
+                }
             }
     }
 }

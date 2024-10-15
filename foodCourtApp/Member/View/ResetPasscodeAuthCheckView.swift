@@ -117,7 +117,9 @@ struct ResetPasscodeAuthCheckView: View {
                         if isSuccessCheck {
                             // TODO 사용자 확인 절차 필요
                             memberViewModel.checkUserInfo(baseUserDto: BaseUserDto(userId: $userId.wrappedValue, userName: $userName.wrappedValue, tellNumber: $tellNumber.wrappedValue)) { res in
-                                
+                                if !res {
+                                    common.alert(message: "회원 정보가 존재하지 않습니다.")
+                                }
                                 self.isClickReset = res
                             }
                             
@@ -127,9 +129,8 @@ struct ResetPasscodeAuthCheckView: View {
                     }
                 )
                 .padding(.bottom, 10)
-                
-                NavigationLink(destination: ResetPasscodeView(userId: $userId), isActive: $isClickReset) {
-                    EmptyView()
+                .sheet(isPresented: $isClickReset) {
+                    ResetPasscodeView(userId: $userId, userName: $userName, tellNumber: $tellNumber)
                 }
                 
                 ButtonComponentView(
