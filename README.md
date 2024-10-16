@@ -1,6 +1,6 @@
 ## 학식, 푸드코트 예약 APP - 작성중
 ### 다른 환경
-- [관리자]() - 생성전
+- [관리자](https://github.com/bang10/foodCourtAdmin)
 - [서버](https://github.com/bang10/bookFoodCourtServer)
 - [고객사]() - 생성전
 
